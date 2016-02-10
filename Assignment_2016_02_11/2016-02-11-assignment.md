@@ -1,6 +1,6 @@
 # Statistical Rethinking Chapter 2, sections 2.1 - 2.3
 
-Name:
+Name: Kazunari Nozue
 
 ## 2E1
 
