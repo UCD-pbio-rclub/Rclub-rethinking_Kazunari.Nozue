@@ -1,13 +1,9 @@
----
-output:
-  html_document:
-    keep_md: yes
----
 # Statistical Rethinking Chapter 3 problems
 
 __Name: Kazunari Nozue
 ## R code 3.27
-```{r}
+
+```r
 p_grid <- seq( from=0 , to=1 , length.out=1000 )
 prior <- rep( 1 , 1000 )
 likelihood <- dbinom( 6 , size=9 , prob=p_grid )

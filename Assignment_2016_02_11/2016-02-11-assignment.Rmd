@@ -10,16 +10,11 @@ Name: Kazunari Nozue
 ## 2E4
 
 ## 2M3
-Pr(Earth|Land)=0.23, why?
-
-Pr.Earth|Land=Pr(L|E)*Pr(E)/Pr(L) # from Bayes theorem
-             =0.3*0.5/(0.3*0.5 + 0.5)
+### Pr(Earth|Land)=0.23, why?
+### Pr(Earth|Land)=Pr(L|E)*Pr(E)/Pr(L) # from Bayes theorem
+###              =0.3*0.5/(0.3*0.5 + 0.5)
 ```{r}
+# what object name do you recommend for conditional probability?
 
 }
-             
-              
-
-
-
 ## 2M4
