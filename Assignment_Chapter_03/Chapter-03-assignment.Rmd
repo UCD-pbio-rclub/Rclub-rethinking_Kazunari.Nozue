@@ -16,11 +16,11 @@ posterior <- posterior / sum(posterior)
 set.seed(100)
 samples <- sample( p_grid , prob=posterior , size=1e4 , replace=TRUE )
 ```
-## 3E1
+## 3E1: How much posterior probability lies below p=0.2?
+sum(posterior[p_grid<0.2]) # 0.0008560951
+## 3E2: How much posterior probability lies above p=0.8?
 
-## 3E2
-
-## 3E3
+## 3E3: How much posterior probability lies between p=0.2 and p=0.8?
 
 ## 3E4
 # 
