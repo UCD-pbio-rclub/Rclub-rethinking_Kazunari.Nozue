@@ -45,7 +45,6 @@ samples2 <- sample( p_grid , prob=posterior3M1 , size=1e5 , replace=TRUE ) # dra
 dens(samples2)
 HPDI(samples2,prob=0.9) # 0.3343343 and 0.7217217
 #STOP AFTER 3M2 FOR 02/25 ASSIGNMENT_
-```
 ## 3M3. Constract a posterior predictive check for the model and data. This means simulate the distribution of samples, averaging over the posterior uncertainty in p. What is the probability of observing 8 water in 15 tosses?
 dummy_w <- rbinom( 1e5 , size=15 , prob=samples2) # should it be samples2?
 # how to average over the posterior uncertainty in p?
@@ -71,6 +70,7 @@ dens(samples2,main="constant (=1) prior")
 # 
 dummy_w3M5 <- rbinom( 1e5 , size=9 , prob=samples3M5) 
 table(dummy_w3M5)/1e5
+```
 
 ## 3H1
 
