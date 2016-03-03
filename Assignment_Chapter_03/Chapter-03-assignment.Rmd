@@ -4,44 +4,73 @@ output:
     keep_md: yes
 ---
 # Statistical Rethinking Chapter 3 problems
-
-__Name: Kazunari Nozue
-## R code 3.27
-```{r}
-p_grid <- seq( from=0 , to=1 , length.out=1000 )
-prior <- rep( 1 , 1000 )
+Name: Kazunari Nozue
+## R code 3.27 # see R code 2.3 for details
+```{r,echo=TRUE}
+p_grid<-seq(from=0,to=1,length.out=1000)
+prior <- rep(1,1000 )
 likelihood <- dbinom( 6 , size=9 , prob=p_grid )
 posterior <- likelihood * prior
 posterior <- posterior / sum(posterior)
 set.seed(100)
-samples <- sample( p_grid , prob=posterior , size=1e4 , replace=TRUE ) # draw 1000 samples from posterior
-```
+samples <- sample( p_grid , prob=posterior , size=1e4 , replace=TRUE ) # draw 1e4 samples from posterior
 ## 3E1: How much posterior probability lies below p=0.2?
-hist(samples)
-sum(samples[samples<0.2]) # 0.8778779
+library(rethinking)
+dens(samples)
+sum(samples[samples<0.2])/1e4 # divide the resulting count by the total number of samples
+# 8.778779e-05
 ## 3E2: How much posterior probability lies above p=0.8?
-
+sum(samples[samples>0.8])/1e4 # divide the resulting count by the total number of samples
+# 0.09482282
 ## 3E3: How much posterior probability lies between p=0.2 and p=0.8?
+sum(samples[samples>0.2 & samples<0.8]) /1e4
+# 0.5400596
+## 3E4. 20% of the posterior proability lies below which value of p?
+quantile(samples,0.2) # 0.5195195
+## 3E5. 20% of the posterior probability lies above which value of p? 
+quantile(samples,1-0.2) # 0.7567568
+## 3E6. Which values of p contain the narrowest interval equal to 66% of the posterior probability?
+HPDI(samples,prob=0.66) # between 0.5205205 and 0.7847848. Highest Posterior Density Intervals (HPDI) are calculated by HPDinterval in the coda package (from help file)
+## 3E7. Which values of p contain 66% of the posterior probability, assuming equal posterior probability both below and above the interval?
+PI(samples,prob=0.66) #0.5005005 and 0.7687688. Percentile intervals (PI) use quantile and assign equal mass to each tail (from help file).
+## 3M1. Suppose the globe tossing data had turned out to be 8 water in 15 tosses. Construct the posterior distribution, using grid approximation. Use the same flat prior as before.
+p_grid<-seq(from=0,to=1,length.out=1000)
+prior <- rep(1,1000 ) # flat prior
+likelihood3M1 <- dbinom(8 , size=15 , prob=p_grid )
+posterior3M1 <- likelihood3M1 * prior
+posterior3M1 <- posterior3M1 / sum(posterior3M1)
+plot(posterior3M1)
+## 3M2. Draw 10,000 samples from the grid approximation from above. Then use the samples to calculate the 90% HPDI for p.
+samples2 <- sample( p_grid , prob=posterior3M1 , size=1e5 , replace=TRUE ) # draw 1e5 samples from posterior
+dens(samples2)
+HPDI(samples2,prob=0.9) # 0.3343343 and 0.7217217
+#STOP AFTER 3M2 FOR 02/25 ASSIGNMENT_
+```
+## 3M3. Constract a posterior predictive check for the model and data. This means simulate the distribution of samples, averaging over the posterior uncertainty in p. What is the probability of observing 8 water in 15 tosses?
+dummy_w <- rbinom( 1e5 , size=15 , prob=samples2) # should it be samples2?
+# how to average over the posterior uncertainty in p?
+table(dummy_w)/1e5 # The probability of observing 8 water in 15 tosses is 0.14735
 
-## 3E4
+## 3M4. Using the posterior distribution constructed from the new (8/15) data, now calculate the probability of observing 6 water in 9 tosses.
+dummy_w <- rbinom( 1e5 , size=9 , prob=samples2) # should it be samples2
+table(dummy_w)/1e5 # The probability of observing 6 water in 9 tosses is 0.17711.
+
+## 3M5. Start over at 3M1, but now use a prior that is zero below p=0.5 and a constant above p=0.5. This corresponds to prior information that a majority of the Earth's surface is water. Repeat each problem above and compare the inferences. What difference does the better prior make? If it helps, compare inferences (using both priors) to the true value p=0.7?
+p_grid<-seq(from=0,to=1,length.out=1000)
+prior3M5 <- rep(c(0,1),each=500 ) # zero below p=0.5 and a constant (=1?) above p=0.5 prior
+plot(prior3M5)
+likelihood3M5 <- dbinom(8 , size=15 , prob=p_grid )
+posterior3M5 <- likelihood3M1 * prior3M5
+posterior3M5 <- posterior3M5 / sum(posterior3M5)
+plot(posterior3M5)
+samples3M5 <- sample( p_grid , prob=posterior3M5 , size=1e5 , replace=TRUE ) # draw 1e5 samples from posterior
+# comparison of 3M1 and 3M5 (different priors)
+par(mfrow=c(1,2),cex=0.5) 
+dens(samples3M5,xlim=c(0,1),main="zero (p<0.5) and 1 (p>=0.5) prior")
+dens(samples2,main="constant (=1) prior")
 # 
-## 3E5
-
-## 3E6
-
-## 3E7
-
-## 3M1
-
-## 3M2
-
-_STOP AFTER 3M2 FOR 02/25 ASSIGNMENT_
-
-## 3M3
-
-## 3M4
-
-## 3M5
+dummy_w3M5 <- rbinom( 1e5 , size=9 , prob=samples3M5) 
+table(dummy_w3M5)/1e5
 
 ## 3H1
 
